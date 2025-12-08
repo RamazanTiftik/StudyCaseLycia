@@ -34,6 +34,21 @@ export default function Home() {
             center.
           </p>
         </div>
+
+        <div className="bg-red-500 text-white p-4 rounded-lg">
+          Tailwind ÇALIŞIYOR 
+        </div>
+
+        <div className="p-10">
+          <div className="w-40 h-40 bg-primary"></div>
+        </div>
+
+        <div className="bg-green-500 text-white p-4 rounded">
+          Tailwind çalışıyor
+        </div>
+
+
+
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
             className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
