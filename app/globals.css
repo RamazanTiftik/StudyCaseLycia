@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* ---------- Tema Değişkenleri ---------- */
 :root {
   --background: #ffffff;
   --foreground: #111111;
@@ -23,7 +22,6 @@
     --foreground: #ededed;
 
     --color-primary: #D94B43;
-    /* Biraz daha açık kırmızı */
     --color-secondary: #9FBFA6;
     --color-accent: #A3D6BD;
     --color-warning: #F2E7A3;
