@@ -29,7 +29,7 @@ export default async function StorePage() {
       </section>
 
       {/* ---------------- Products Grid ---------------- */}
-      <section className="max-w-[1400px] mx-auto px-2 md:px-4 pb-20">
+      <section className="max-w-[1500px] mx-auto px-2 md:px-4 pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
           {products.map((product: any) => (
             <ProductCard key={product.id} product={product} />

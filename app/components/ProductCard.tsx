@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaTag, FaInfoCircle, FaMoneyBillWave } from "react-icons/fa";
+import { FaTag, FaInfoCircle } from "react-icons/fa";
 
 interface ProductCardProps {
     product: {
@@ -13,6 +13,11 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+    const formattedPrice = product.price.toLocaleString("tr-TR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
     return (
         <div className="group bg-white shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col relative">
 
@@ -32,19 +37,19 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                 {/* Title */}
                 <h3 className="font-heading text-lg md:text-xl mb-1 flex items-center gap-1">
-                    <FaTag className="text-primary" /> {product.name}
+                    <FaTag className="text-accent" /> {product.name}
                 </h3>
 
                 {/* Description */}
                 {product.description && (
                     <p className="text-gray-700 text-sm md:text-base line-clamp-2 mb-1 flex items-center gap-1">
-                        <FaInfoCircle className="text-gray-500" /> {product.description}
+                        {product.description}
                     </p>
                 )}
 
                 {/* Price */}
                 <p className="absolute bottom-4 left-4 text-black font-bold text-base flex items-center gap-1 transition-transform duration-300 group-hover:-translate-y-1">
-                    <FaMoneyBillWave className="text-primary" /> ₺{product.price}
+                    <span className="text-accent">₺</span>{formattedPrice}
                 </p>
 
                 {/* See Details */}

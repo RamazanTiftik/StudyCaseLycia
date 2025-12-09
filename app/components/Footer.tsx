@@ -5,7 +5,7 @@ import { FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white py-12">
+    <footer className="bg-secondary text-white py-12">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         
         {/* ---------- Brand Section ---------- */}
