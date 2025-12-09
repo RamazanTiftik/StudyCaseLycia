@@ -1,3 +1,4 @@
+
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -7,13 +8,17 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  // Admin sayfalarında normal navbar ve footer gösterme
+  const isAdminPage = pathname?.startsWith("/admin");
+
   return (
     <>
-      <Navbar />
+      {!isAdminPage && <Navbar />}
 
-      <main className={isHome ? "" : "pt-24"}>
+      <main className={!isAdminPage && !isHome ? "pt-24" : ""}>
         {children}
       </main>
+
     </>
   );
 }
