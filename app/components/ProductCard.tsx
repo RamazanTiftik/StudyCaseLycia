@@ -42,7 +42,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                 {/* Description */}
                 {product.description && (
-                    <p className="text-gray-700 text-sm md:text-base line-clamp-2 mb-1 flex items-center gap-1">
+                    <p className="text-gray-700 text-sm md:text-base line-clamp-2 mb-1 flex items-center gap-1 min-h-[150px] items-start">
                         {product.description}
                     </p>
                 )}

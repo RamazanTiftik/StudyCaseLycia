@@ -11,24 +11,11 @@
   --color-warning: #E6D78C;
 
   /* Font Vars */
-  --font-heading: "Tenor Sans", sans-serif;
-  --font-body: "Montserrat Light", sans-serif;
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
-/* ----- Dark Mode ----- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-
-    --color-primary: #D94B43;
-    --color-secondary: #9FBFA6;
-    --color-accent: #A3D6BD;
-    --color-warning: #F2E7A3;
-  }
-}
-
-/* ---------- Tailwind Theme Values ---------- */
+/* Tailwind Theme */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -42,9 +29,9 @@
   --font-body: var(--font-body);
 }
 
-/* ---------- Global Style ---------- */
 body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-body);
+  /* Montserrat */
 }

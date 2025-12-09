@@ -58,7 +58,7 @@ export default function Hero() {
           transition={{ delay: 0.4 }}
         >
           <Link href="/store">
-            <button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-body text-lg md:text-xl transition-transform hover:scale-105 shadow-lg">
+            <button className="bg-secondary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-body text-lg md:text-xl transition-transform hover:scale-105 shadow-lg">
               Mağazayı Keşfet
             </button>
           </Link>

@@ -2,7 +2,7 @@ import { supabase } from "../../../lib/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../../components/Footer";
-import { FaTag, FaInfoCircle, FaMoneyBillWave, FaCartPlus } from "react-icons/fa";
+import AddToCartButton from "@/app/components/AddToCartButton";
 
 interface Product {
   id: number;
@@ -13,10 +13,9 @@ interface Product {
 }
 
 interface Props {
-  params: Promise<{ id: string }>; // promised
+  params: Promise<{ id: string }>;
 }
 
-//get product data from db
 async function getProduct(id: number) {
   const { data, error } = await supabase
     .from("products")
@@ -24,14 +23,10 @@ async function getProduct(id: number) {
     .eq("id", id)
     .single();
 
-  if (error) {
-    console.error("Supabase error:", error);
-    return null;
-  }
+  if (error) return null;
   return data as Product;
 }
 
-//get similar products
 async function getSimilarProducts(currentId: number) {
   const { data } = await supabase
     .from("products")
@@ -42,102 +37,123 @@ async function getSimilarProducts(currentId: number) {
   return data as Product[] | null;
 }
 
-
 export default async function ProductPage(props: Props) {
-
-  // open to params with await
   const { id } = await props.params;
-
-  //convert to number 
   const productId = Number(id);
 
-  //error catch 
   if (isNaN(productId)) {
-    return <p className="text-red-500 text-center mt-20">Geçersiz ürün ID!</p>;
+    return <p className="text-center mt-20 text-gray-600">Geçersiz ürün ID!</p>;
   }
 
   const product = await getProduct(productId);
   const similarProducts = await getSimilarProducts(productId);
 
   if (!product) {
-    return <p className="text-red-500 text-center mt-20">Ürün bulunamadı!</p>;
+    return <p className="text-center mt-20 text-gray-600">Ürün bulunamadı!</p>;
   }
 
   return (
-    <main className="bg-white text-black font-body min-h-screen">
-      <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <main className="min-h-screen bg-white text-black font-body">
+      <section className="max-w-6xl mx-auto px-4 py-16 md:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
 
-          {/* Ürün Görsel */}
-          <div className="relative w-full h-96 md:h-[600px] rounded-lg overflow-hidden shadow-lg group">
+          {/* Product Image */}
+          <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover p-4"
+              priority
             />
           </div>
 
-          {/* Ürün Bilgileri */}
-          <div className="flex flex-col gap-6 ">
-            <h1 className="text-3xl md:text-4xl font-heading text-primary flex items-center gap-2">
-              <FaTag className="text-primary" /> {product.name}
-            </h1>
+          {/* Product Info */}
+          <div className="flex flex-col gap-8">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-0.5 bg-secondary"></div>
+                <span className="text-sm text-gray-500">Ürün Detayı</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-heading text-primary mb-4">
+                {product.name}
+              </h1>
+            </div>
 
             {product.description && (
-              <p className="text-gray-700 text-base md:text-lg flex items-start gap-2">
-                <FaInfoCircle className="text-gray-500 mt-1" />
-                {product.description}
-              </p>
+              <div className="border-l-2 border-secondary/20 pl-4 py-2">
+                <p className="text-gray-600 leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
             )}
 
-            <p className="text-black font-bold text-2xl flex items-center gap-2">
-              <FaMoneyBillWave className="text-primary" /> ₺{product.price}
-            </p>
+            {/* Price */}
+            <div className="pt-4">
+              <div className="text-2xl md:text-3xl font-bold text-primary">
+                ₺{product.price.toLocaleString("tr-TR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </div>
+              <div className="text-sm text-gray-500 mt-1">KDV Dahil</div>
+            </div>
 
-            {/* Butonlar */}
-            <div className="flex flex-wrap gap-4 mt-70">
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <AddToCartButton
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                }}
+              />
               <Link href="/store">
-                <button className="bg-primary/80 hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-base md:text-lg transition-transform duration-300 hover:scale-105">
+                <button className="px-8 py-3 border border-gray-300 rounded-lg 
+                                 hover:border-gray-400 transition-colors">
                   Mağazaya Dön
                 </button>
               </Link>
-
-              <button className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-base md:text-lg flex items-center gap-2 transition-transform duration-300 hover:scale-105">
-                <FaCartPlus /> Sepete Ekle
-              </button>
             </div>
           </div>
         </div>
 
-        {/* Benzer Ürünler */}
+        {/* Similar Products */}
         {similarProducts && similarProducts.length > 0 && (
-          <div className="mt-20">
-            <h2 className="text-2xl md:text-3xl font-heading text-primary mb-8">
-              Benzer Ürünler
-            </h2>
+          <div className="mt-24">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl font-heading text-primary mb-2">
+                Benzer Ürünler
+              </h2>
+              <div className="w-12 h-0.5 bg-secondary mx-auto"></div>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {similarProducts.map((item) => (
                 <Link
                   key={item.id}
                   href={`/product/${item.id}`}
-                  className="group bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                  className="group"
                 >
-                  <div className="relative w-full h-86 overflow-hidden">
+                  <div className="relative aspect-square mb-4 bg-gray-50 rounded-lg overflow-hidden">
                     <Image
                       src={item.image}
                       alt={item.name}
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
                       {item.name}
                     </h3>
-                    <p className="text-primary font-bold mt-2">₺{item.price}</p>
+                    <div className="text-primary font-bold">
+                      ₺{item.price.toLocaleString("tr-TR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </div>
                   </div>
                 </Link>
               ))}
